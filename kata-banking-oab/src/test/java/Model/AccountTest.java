@@ -46,15 +46,6 @@ class AccountTest {
     }
 
     @Test
-    public void testWithrawOK() {
-        account = new Account(0);
-        account.deposit(500);
-        account.withdraw(300);
-        int expected = 500-300;
-        Assert.assertEquals(expected, account.getBalance());
-    }
-
-    @Test
     public void testDepositAndWithraw() {
         account = new Account(0);
         account.deposit(500);
@@ -80,6 +71,34 @@ class AccountTest {
                 () -> account.deposit(null));
         assertEquals(ConstantesBanking.MSG_VEUILLEZ_SAISIR_MONTANT
                 , exception.getMessage());
+    }
+
+    @Test
+    public void testAccountUHistory() {
+        account.deposit(500);
+        account.withdraw(300);
+        final List<String> resutls = account.printStatement();
+        assertTrue(!CollectionUtils.isEmpty(resutls));
+        final int expectedTotalUHistory = 2;
+        assertEquals(expectedTotalUHistory, resutls.size());
+    }
+
+    @Test
+    public void TestShowingHistory() {
+        account.deposit(500);
+        account.withdraw(300);
+        final List<String> resutls = account.printStatement();
+        assertTrue(!CollectionUtils.isEmpty(resutls));
+        final int expectedTotalUHistory = 2;
+        final String[] withrawlOperation = resutls.get(1).split("--");
+        assertEquals(expectedTotalUHistory, resutls.size());
+        String expectedOperationType = " Operation : " + OperationTypeEnum.WITHDRAWAL.name();
+        String  expectedBalance = " Balance : " + 200;
+        String expectedAmount = " Amount : " +300;
+        assertEquals(expectedOperationType.toLowerCase(Locale.ROOT).trim(), withrawlOperation[1].toLowerCase(Locale.ROOT).trim());
+        assertEquals(expectedAmount.toLowerCase(Locale.ROOT).trim(), withrawlOperation[2].toLowerCase(Locale.ROOT).trim());
+        assertEquals(expectedBalance, withrawlOperation[3]);
+
     }
 
 
