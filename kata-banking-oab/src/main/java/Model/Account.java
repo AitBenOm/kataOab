@@ -1,10 +1,10 @@
 package Model;
 
-
 import transvers.ConstantesBanking;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Account implements Serializable {
@@ -52,7 +52,18 @@ public class Account implements Serializable {
     public List<String> printStatement() {
 
 
-      return Collections.emptyList();
+       return this.operationsBook.stream().map(operation -> {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.append("Date : "+operation.operationDate());
+            stringBuilder.append(" -- ");
+            stringBuilder.append("Operation : "+operation.operationType());
+            stringBuilder.append(" -- ");
+            stringBuilder.append("Amount : "+operation.amount());
+            stringBuilder.append(" -- ");
+            stringBuilder.append("Balance : "+operation.balance());
+            return stringBuilder.toString();
+        }).collect(Collectors.toList());
     }
 
 
